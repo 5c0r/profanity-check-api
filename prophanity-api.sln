@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apex", "Apex", "{04DA74ED-D
 		Apex\AfterInsertContentVersion.apxt = Apex\AfterInsertContentVersion.apxt
 		Apex\ContentCheckServiceInvoker.apxc = Apex\ContentCheckServiceInvoker.apxc
 		Apex\GlobalConfiguration.apxc = Apex\GlobalConfiguration.apxc
+		Apex\ProfanityCheckResponse.apxc = Apex\ProfanityCheckResponse.apxc
+		Apex\ProfanityCheckResult.apxc = Apex\ProfanityCheckResult.apxc
 	EndProjectSection
 EndProject
 Global

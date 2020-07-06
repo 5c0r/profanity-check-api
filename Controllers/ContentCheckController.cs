@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProfanityCheck.WebAPI.Model;
 using ProfanityCheckLib.Model;
 using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace ProfanityCheck.WebAPI
@@ -32,27 +35,37 @@ namespace ProfanityCheck.WebAPI
         {
             try
             {
-                if(Files.File != null)
-                {
+                if (Files.File == null) 
+                    throw new Exception("No File was uploaded");
+                if (!this.profanityCheckSvc.AcceptedExtensions.Any(ext => Files.File.FileName.EndsWith(ext)))
+                    throw new Exception($"Invalid file extensions. " +
+                        $"Expected ${string.Join(',', this.profanityCheckSvc.AcceptedExtensions.ToArray())}.");
 
-                }
-                else
+                using(MemoryStream ms = new MemoryStream())
                 {
-                    throw new InvalidOperationException("Invalid file uploaded");
-                }
+                    Files.File.CopyTo(ms);
+                    var textContent = Encoding.UTF8.GetString(ms.ToArray());
 
-                return Ok();
+                    var result = this.profanityCheckSvc.GetViolatedWords(textContent);
+
+                    return Ok(new ProfanityCheckResponse()
+                    {
+                        Success = true,
+                        Data = new ProfanityCheckValue()
+                        {
+                           ViolatedWords = result.ToList()
+                        }
+                    }) ;
+                }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(new ErrorResponse()
+                {
+                    Data = ex.Message
+                });
             }
 
-        }
-
-        public sealed class FileInputModel
-        {
-            public IFormFile File { get; set; }
         }
     }
 }

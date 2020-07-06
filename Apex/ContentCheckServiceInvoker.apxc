@@ -21,7 +21,18 @@ public class ContentCheckServiceInvoker implements Queueable, Database.AllowsCal
             System.debug('response code' + response.getStatusCode());
             System.debug('response' + response.getBody());
             
+            // todo: check if 200 responsecode
             // TODO: READ JSON THEN email and updated
+            ProfanityCheckResponse profanityCheckResult = (ProfanityCheckResponse)JSON.deserializeStrict(response.getBody(), ProfanityCheckResponse.class);
+            
+            System.debug('profanityCheck ' + profanityCheckResult.success);
+            for(String a : profanityCheckResult.data.violatedWords)
+            {
+                System.debug('Violated words ' + a);
+            }
+            
+            // TODO: If violatedWords size > 0 
+            // this.notifyEmailToUser
         }
         catch(Exception ex)
         {
@@ -31,7 +42,8 @@ public class ContentCheckServiceInvoker implements Queueable, Database.AllowsCal
         System.debug('request sent');
     }
     
-    public HttpResponse uploadFile(Blob file_body, String file_name, String reqEndPoint){
+    
+    private HttpResponse uploadFile(Blob file_body, String file_name, String reqEndPoint){
         // http://enreeco.blogspot.in/2013/01/salesforce-apex-post-mutipartform-data.html
         // http://salesforce.stackexchange.com/questions/24108/post-multipart-without-base64-encoding-the-body
         String boundary = '----------------------------741e90d31eff';
@@ -75,6 +87,6 @@ public class ContentCheckServiceInvoker implements Queueable, Database.AllowsCal
     }   
     
     private void notifyEmailToUser() {
-        
+        // TODO: Get user name then MailerHelper
     }
 }

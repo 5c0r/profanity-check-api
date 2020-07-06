@@ -1,0 +1,3 @@
+public class ProfanityCheckResult {
+	public List<String> violatedWords;
+}

@@ -1,0 +1,4 @@
+public class ProfanityCheckResponse {
+	public Boolean success;
+    public ProfanityCheckResult data;
+}
