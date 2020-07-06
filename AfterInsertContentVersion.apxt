@@ -1,0 +1,26 @@
+trigger AfterInsertContentVersion on ContentVersion (after insert) {
+        for(ContentVersion a : Trigger.New)
+        {
+            // There should be only 1 latest version 
+            ContentVersion o = [SELECT VersionData,FileExtension,OwnerId FROM ContentVersion WHERE IsLatest = true AND ContentDocumentID = :a.ContentDocumentId];
+            
+            if(o != null)
+            {
+                System.debug('file extenssion' + o.FileExtension);
+                System.debug('ownerId' + o.FileExtension);
+                if(ContentCheckServiceInvoker.TextExtensions.contains(o.FileExtension))
+                {
+                    System.debug('Text file: ' + o.VersionData.toString());
+                    // Make HTTP REQUEST here , or enqueue ? 
+                    if(o.VersionData.toString().contains('vittu'))
+                    {
+                        a.addError('This is not approriate things to say');
+                    }
+                }
+                else
+                {
+                    System.debug('Not text format , ignored');
+                }
+            }
+        }
+}
