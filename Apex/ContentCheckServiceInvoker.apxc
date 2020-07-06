@@ -1,0 +1,80 @@
+public class ContentCheckServiceInvoker implements Queueable, Database.AllowsCallouts {
+    public static Set<string> TextExtensions = new Set<string> { 'txt', 'csv' };
+        
+    private String contentDocumentId;
+    private String ownerId;
+    private Blob contentDocumentBlob;
+    
+    public ContentCheckServiceInvoker(String contentDocumentId, String ownerId, Blob contentDocumentBlob)
+    {
+        this.contentDocumentId = contentDocumentId;
+        this.ownerId = ownerId;
+        this.contentDocumentBlob = contentDocumentBlob;
+    }
+    
+    public void execute(QueueableContext context) {
+        System.debug('Doing stuff with' + this.contentDocumentId);
+        
+        try
+        {
+            HttpResponse response = this.uploadFile(this.contentDocumentBlob, 'test.txt', GlobalConfiguration.CONTENTCHECK_API);            
+            System.debug('response code' + response.getStatusCode());
+            System.debug('response' + response.getBody());
+            
+            // TODO: READ JSON THEN email and updated
+        }
+        catch(Exception ex)
+        {
+            System.debug('Error' + ex.getMessage());
+        }
+        
+        System.debug('request sent');
+    }
+    
+    public HttpResponse uploadFile(Blob file_body, String file_name, String reqEndPoint){
+        // http://enreeco.blogspot.in/2013/01/salesforce-apex-post-mutipartform-data.html
+        // http://salesforce.stackexchange.com/questions/24108/post-multipart-without-base64-encoding-the-body
+        String boundary = '----------------------------741e90d31eff';
+        String header = '--'+boundary+'\r\nContent-Disposition: form-data; name="file"; filename="'+file_name+'"\r\nContent-Type: application/octet-stream'; // added '\r's removed ';' see Tim Smith's comment
+        String footer = '\r\n--'+boundary+'--';              
+        String headerEncoded = EncodingUtil.base64Encode(Blob.valueOf(header+'\r\n\r\n'));
+        while(headerEncoded.endsWith('='))
+        {
+            header+=' ';
+            headerEncoded = EncodingUtil.base64Encode(Blob.valueOf(header+'\r\n\r\n'));
+        }
+        String bodyEncoded = EncodingUtil.base64Encode(file_body);
+        String footerEncoded = EncodingUtil.base64Encode(Blob.valueOf(footer));
+        
+        Blob bodyBlob = null;
+        String last4Bytes = bodyEncoded.substring(bodyEncoded.length()-4,bodyEncoded.length());
+        if(last4Bytes.endsWith('='))
+        {
+            Blob decoded4Bytes = EncodingUtil.base64Decode(last4Bytes);
+            HttpRequest tmp = new HttpRequest();
+            tmp.setBodyAsBlob(decoded4Bytes);
+            String last4BytesFooter = tmp.getBody()+footer;   
+            bodyBlob = EncodingUtil.base64Decode(headerEncoded+bodyEncoded.substring(0,bodyEncoded.length()-4)+EncodingUtil.base64Encode(Blob.valueOf(last4BytesFooter)));
+        }
+        else
+        {
+            bodyBlob = EncodingUtil.base64Decode(headerEncoded+bodyEncoded+footerEncoded);
+        }
+        
+        HttpRequest req = new HttpRequest();
+        req.setHeader('Content-Type','multipart/form-data; boundary='+boundary);
+        req.setMethod('POST');
+        req.setEndpoint(reqEndPoint);
+        req.setBodyAsBlob(bodyBlob);
+        req.setTimeout(120000);
+        
+        Http http = new Http();
+        HTTPResponse res = http.send(req);
+        
+        return res;
+    }   
+    
+    private void notifyEmailToUser() {
+        
+    }
+}

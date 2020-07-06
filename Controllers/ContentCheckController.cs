@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ProfanityCheckLib.Model;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace ProfanityCheck.WebAPI
 {
@@ -23,9 +27,32 @@ namespace ProfanityCheck.WebAPI
         }
 
         [HttpPost]
-        public IActionResult CheckContentDocument([FromBody]object something)
+        [Consumes("multipart/form-data")]
+        public IActionResult CheckContentDocument([FromForm] FileInputModel Files, CancellationToken cancellationToken)
         {
-            return Ok();
+            try
+            {
+                if(Files.File != null)
+                {
+
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid file uploaded");
+                }
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        public sealed class FileInputModel
+        {
+            public IFormFile File { get; set; }
         }
     }
 }

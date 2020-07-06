@@ -15,7 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apex", "Apex", "{37152758-4710-4806-8C0B-7E7148ADA55A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apex", "Apex", "{04DA74ED-DE01-4E76-BA58-F63106855826}"
+	ProjectSection(SolutionItems) = preProject
+		Apex\AfterInsertContentVersion.apxt = Apex\AfterInsertContentVersion.apxt
+		Apex\ContentCheckServiceInvoker.apxc = Apex\ContentCheckServiceInvoker.apxc
+		Apex\GlobalConfiguration.apxc = Apex\GlobalConfiguration.apxc
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

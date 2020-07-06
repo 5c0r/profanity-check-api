@@ -1,0 +1,4 @@
+public class GlobalConfiguration {
+	public static final String CONTENTCHECK_API = 'https://cfeb0a9181d9.ngrok.io/api/contentcheck/';
+    public static final String CONTENTCHECK_API_REGEX = 'https://localhost:5001/api/contentcheck/regex';
+}

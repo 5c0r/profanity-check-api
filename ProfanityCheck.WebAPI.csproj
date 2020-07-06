@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>prophanity_api</RootNamespace>
+    <RootNamespace>ProfanityCheck.WebAPI</RootNamespace>
+    <StartupObject>ProfanityCheck.WebAPI.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

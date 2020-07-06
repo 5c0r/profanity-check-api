@@ -1,4 +1,0 @@
-public class ContentCheckServiceInvoker {
-    public static Set<string> TextExtensions = new Set<string> { 'txt', 'csv' };   
-    
-}
