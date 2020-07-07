@@ -24,5 +24,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 COPY --from=publish /src/publish .
 
-# heroku uses the following
+# ENTRYPOINT ["dotnet", "ProfanityCheck.WebAPI.dll"]
+
+# Heroku Commands
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet ProfanityCheck.WebAPI.dll
