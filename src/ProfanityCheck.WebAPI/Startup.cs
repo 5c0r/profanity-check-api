@@ -46,9 +46,7 @@ namespace ProfanityCheck.WebAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -1,0 +1,11 @@
+trigger AfterContentDocumentLink on ContentDocumentLink (after insert) {
+    System.debug('aftercontentdocumentlink' + Trigger.new);
+    for(ContentDocumentLink a : Trigger.New)
+    {
+        ContentDocument curDocument = (ContentDocument)[SELECT FileExtension FROM ContentDocument WHERE Id = :a.ContentDocumentId];
+        if(curDocument != null && ContentCheckServiceInvoker.TextExtensions.contains(curDocument.FileExtension))
+        {
+           System.enqueueJob(new ContentCheckServiceInvoker(a.ContentDocumentId));
+        }
+    }
+}

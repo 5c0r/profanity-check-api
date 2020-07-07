@@ -1,0 +1,20 @@
+trigger AfterInsertContentVersion on ContentVersion (after insert) {
+    for(ContentVersion a : Trigger.New)
+    {
+        ContentVersion curVersion = (ContentVersion)[SELECT FileExtension FROM ContentVersion WHERE IsLatest = true AND ContentDocumentId= :a.ContentDocumentId ];
+        
+        if(curVersion != null)
+        {
+            if(ContentCheckServiceInvoker.TextExtensions.contains(curVersion.FileExtension))
+            {
+                System.enqueueJob(
+                    new ContentCheckServiceInvoker(a.ContentDocumentId)
+                );
+            }
+            else
+            {
+                System.debug('Not text format , ignored');
+            }
+        }
+    }
+}
