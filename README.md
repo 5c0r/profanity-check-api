@@ -1,3 +1,8 @@
+![CI](https://github.com/5c0r/profanity-check-api/workflows/CI/badge.svg)
+
+## Introduction
+- This is just an assignment. But trying out new stuffs is cool ;)
+
 ## Requirements
 - .NET Core 3.1 SDK
 - Docker to run Dockerfile locally
@@ -6,7 +11,7 @@
 
 ## Developing and running locally
 - Go to `src` folder, run `dotnet restore` , `dotnet build`, `dotnet run --project  .\ProfanityCheck.WebAPI\ProfanityCheck.WebAPI.csproj` to start the web project
-- Using ngRok to tunnel requests to your localhost ( if you are testing againts Salesforce client)
+- Using ngRok/anything to tunnel requests to your localhost ( if you are testing againts Salesforce client)
 - Use the postman_collection.json , remember to re-attach text file in POST request
 
 ## Deploying backend API ( to Heroku )
@@ -23,12 +28,12 @@
 - Email attachment settings might need some tweak
 
 ## What has been done
-- [x] Apex Triggers and Apex Queueable Job 
+- [X] Apex Triggers and Apex Queueable Job 
 - [X] Backend API with list of banned words from Github and local file (Banned_Words.txt)
-- [x] Tests for Backend API 
+- [X] Tests for Backend API 
 - [X] Deploy-able Backend API , with Github Actions and Dockerfile
 - [ ] Tests for Salesforce Client App
-- [x] propose or even implement the logic to notify the user when s/he has attached files with disallowed content,
+- [X] propose or even implement the logic to notify the user when s/he has attached files with disallowed content,
 => This can be done using either email (implemented) or Notification Bell
 - [ ] propose or even implement the logic to process files with the size bigger than 12MB (you know Salesforce limits, don’t you?).
 => Sounds like Apex Governor Limits/ Heap size limits , I am thinking should it be about splitting up the file into multiple chunks (being sent with contentDocumentId), then chaining the queuable jobs ? File should be merged on the other end and to be processed
@@ -41,7 +46,7 @@
 
 ## What were challenging
 - Figuring out what is the right Entity Trigger to use ( ContentDocument,ContentVersion, ContentDocumentLink) 
-- ContentVersion.VersionData needs to be fetched at after insert
+- ContentVersion.VersionData needs to be fetched again in Trigger
 - Trigger.new does not show everything
 https://salesforce.stackexchange.com/questions/268436/trigger-on-content-document-to-retrieve-the-body
 - Uploading files using Apex was a pain, maybe there was a better approach
