@@ -1,0 +1,40 @@
+@isTest
+private class ProfanityApiTests {
+    @isTest static void testPostServiceNonViolated() {
+        Test.setMock(HttpCalloutMock.class, new ProfanityApiMockImpl());
+        
+        ContentVersion contentVersionInsert = new ContentVersion(
+            Title = 'Testti',
+            PathOnClient = 'Testti.txt',
+            VersionData = Blob.valueOf('test something'),
+            IsMajorVersion = true
+        );
+        
+        ContentCheckServiceInvoker svcUnderTest = new ContentCheckServiceInvoker(contentVersionInsert.Id);
+        HttpResponse res = svcUnderTest.uploadFile(contentVersionInsert.VersionData, contentVersionInsert.PathOnClient, GlobalConfiguration.CONTENTCHECK_API);
+        
+        ProfanityCheckResponse profanityCheckResult = (ProfanityCheckResponse)JSON.deserializeStrict(res.getBody(), ProfanityCheckResponse.class);
+        
+        System.assertEquals(profanityCheckResult.data.violatedWords.size(),0);
+        System.assertEquals(res.getStatusCode(), 200);
+    }
+    
+    @isTest static void testPostServiceViolated() {
+        Test.setMock(HttpCalloutMock.class, new ProfanityApiPostMockImpl());
+        
+        ContentVersion contentVersionInsert = new ContentVersion(
+            Title = 'Testti',
+            PathOnClient = 'Testti.txt',
+            VersionData = Blob.valueOf('test something violated'),
+            IsMajorVersion = true
+        );
+        
+        ContentCheckServiceInvoker svcUnderTest = new ContentCheckServiceInvoker(contentVersionInsert.Id);
+        HttpResponse res = svcUnderTest.uploadFile(contentVersionInsert.VersionData, contentVersionInsert.PathOnClient, GlobalConfiguration.CONTENTCHECK_API);
+        ProfanityCheckResponse profanityCheckResult = (ProfanityCheckResponse)JSON.deserializeStrict(res.getBody(), ProfanityCheckResponse.class);
+        
+        System.assertEquals(profanityCheckResult.data.violatedWords.size(),2);
+            
+        System.assertEquals(res.getStatusCode(), 200);
+    }
+}

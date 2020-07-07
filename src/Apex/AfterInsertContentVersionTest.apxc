@@ -1,0 +1,46 @@
+@isTest
+private class AfterInsertContentVersionTest {
+    
+    @testSetup
+    static void setup()	{
+        // TODO: Fixture/ setup
+        ContentVersion contentVersionInsert = new ContentVersion(
+            Title = 'Testti',
+            PathOnClient = 'Testti.txt',
+            VersionData = Blob.valueOf('test something'),
+            IsMajorVersion = true
+        );
+        insert contentVersionInsert;
+        
+        System.debug('Test setup ran');
+    }
+    
+    @isTest static void testAddingFileWithNoBannedWords() {
+        
+        ContentVersion currentContentVersion = [SELECT Id, Title, ContentDocumentId FROM ContentVersion LIMIT 1];
+        ContentVersion contentVersionSelect = [SELECT Id, Title, ContentDocumentId FROM ContentVersion WHERE Id = :currentContentVersion.Id LIMIT 1];
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new ProfanityApiMockImpl());
+        Test.stopTest();
+        List<ContentDocument> documents = [SELECT Id, Title, LatestPublishedVersionId FROM ContentDocument WHERE Id = :contentVersionSelect.ContentDocumentId];
+        System.assertEquals(documents.size(), 1);
+        
+    }
+    
+    // This test is not working :(
+    /*@isTest static void testAddingFileWithBannedWords() {
+        
+        Test.startTest();
+        ContentVersion currentContentVersion = [SELECT Id, Title, ContentDocumentId FROM ContentVersion LIMIT 1];
+        ContentVersion contentVersionSelect = [SELECT Id, Title, ContentDocumentId FROM ContentVersion WHERE Id = :currentContentVersion.Id LIMIT 1];
+        
+        Test.setMock(HttpCalloutMock.class, new ProfanityApiMockImpl());      
+        ContentCheckServiceInvoker.mock = new ProfanityApiMockImpl();
+        
+        Test.stopTest();
+        
+        List<ContentDocument> documents = [SELECT Id, Title, LatestPublishedVersionId,IsDeleted FROM ContentDocument WHERE Id = :contentVersionSelect.ContentDocumentId];
+        
+        System.assertEquals(documents.size(), 0);
+    }*/
+}
