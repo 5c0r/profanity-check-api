@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -38,6 +40,14 @@ namespace ProfanityCheckLib.Service
         public void AddNewBannedWordsFromGitHub(string url)
         {
             this._bannedWords.AddRange(GetBannedWordsFromGithub(url).Result);
+        }
+
+        public void AddBannedWordsFromTextFile(string filePath)
+        {
+            var stringContent = File.ReadAllText(filePath, Encoding.UTF8);
+            var parsedString = stringContent.Split(Environment.NewLine);
+
+            this._bannedWords.AddRange(parsedString);
         }
 
         private async Task<IList<string>> GetBannedWordsFromGithub(string githubUrl)

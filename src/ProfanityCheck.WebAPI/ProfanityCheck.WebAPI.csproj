@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -8,5 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProfanityCheckLib\ProfanityCheckLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Banned_Words.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

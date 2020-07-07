@@ -12,6 +12,8 @@ namespace ProfanityCheckLib.Tests.Integration
         public ProfanityCheckServiceTests()
         {
             this.serviceUnderTests = new ProfanityCheckService();
+
+            this.serviceUnderTests.AddBannedWordsFromTextFile("Test.txt");
             this.serviceUnderTests.AddNewBannedWordsFromGitHub("https://raw.githubusercontent.com/chucknorris-io/swear-words/master/fi");
             this.serviceUnderTests.AddNewBannedWordsFromGitHub("https://raw.githubusercontent.com/chucknorris-io/swear-words/master/en");
         }
@@ -21,6 +23,12 @@ namespace ProfanityCheckLib.Tests.Integration
         {
             this.serviceUnderTests.Should().NotBeNull();
             this.serviceUnderTests.BannedWords.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact(Skip = "Not work in Docker. Investigating")]
+        public void CanGetBannedWordsFromTextFile()
+        {
+            this.serviceUnderTests.BannedWords.Should().Contain("sad");
         }
 
         [Fact]
@@ -43,7 +51,7 @@ namespace ProfanityCheckLib.Tests.Integration
                 .BeTrue("It's a bad word, and it's even in uppercase");
 
             this.serviceUnderTests.CheckWithRegex("Mita helvetisti ?").Should()
-                .BeTrue("It's a bad word, and it's even in uppercase");
+                .BeTrue("It's a bad word");
 
         }
 

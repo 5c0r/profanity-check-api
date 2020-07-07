@@ -32,6 +32,7 @@ namespace ProfanityCheck.WebAPI
                    
                    newSvc.AddNewBannedWordsFromGitHub("https://raw.githubusercontent.com/chucknorris-io/swear-words/master/fi");
                    newSvc.AddNewBannedWordsFromGitHub("https://raw.githubusercontent.com/chucknorris-io/swear-words/master/en");
+                   newSvc.AddBannedWordsFromTextFile("Banned_Words.txt");
 
                    return newSvc;
                });

@@ -21,4 +21,10 @@
     <ProjectReference Include="..\ProfanityCheckLib\ProfanityCheckLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
