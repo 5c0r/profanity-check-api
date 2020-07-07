@@ -11,6 +11,27 @@
 				"method": "GET",
 				"header": [],
 				"url": {
+					"raw": "https://salesforce-profanity-check.herokuapp.com/api/contentcheck",
+					"protocol": "https",
+					"host": [
+						"salesforce-profanity-check",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"contentcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test request Local",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
 					"raw": "https://localhost:5001/api/contentcheck",
 					"protocol": "https",
 					"host": [
@@ -36,7 +57,38 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "test.txt"
+							"src": "/C:/Users/nmt19/Desktop/test.txt"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://salesforce-profanity-check.herokuapp.com/api/contentcheck",
+					"protocol": "https",
+					"host": [
+						"salesforce-profanity-check",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"contentcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post file Local",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/nmt19/Desktop/test.txt"
 						}
 					]
 				},
